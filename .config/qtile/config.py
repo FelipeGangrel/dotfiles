@@ -110,7 +110,7 @@ group_names = [
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names] + [
 	ScratchPad("scratchpad", [
-		DropDown("term", "alacritty", 
+		DropDown("term", terminal, 
 			opacity=0.9,
 			width=0.98,
 			x=0.01,
