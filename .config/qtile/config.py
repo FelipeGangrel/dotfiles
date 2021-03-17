@@ -4,7 +4,7 @@ import subprocess
 from typing import List  # noqa: F401
 
 from libqtile import bar, hook, layout, widget
-from libqtile.config import Click, Drag, Group, Key, Match, Screen
+from libqtile.config import Click, Drag, DropDown, Group, Key, Match, ScratchPad, Screen
 from libqtile.lazy import lazy
 from libqtile.utils import guess_terminal
 
@@ -37,6 +37,7 @@ keys = [
     Key([mod, "shift"], "Return",
         lazy.spawn("rofi -show run"),
         desc="Spawn Rofi menu"),
+    Key([mod], 'F12', lazy.group['scratchpad'].dropdown_toggle('term')),
 
     # Treetab controls
     Key([mod, "control"], "k",
@@ -107,7 +108,16 @@ group_names = [
 ]
 
 
-groups = [Group(name, **kwargs) for name, kwargs in group_names]
+groups = [Group(name, **kwargs) for name, kwargs in group_names] + [
+	ScratchPad("scratchpad", [
+		DropDown("term", "alacritty", 
+			opacity=0.9,
+			width=0.98,
+			x=0.01,
+			y=0
+		),
+	]),
+]
 
 for i, (name, kwargs) in enumerate(group_names, 1):
     # Switch to another group
@@ -145,6 +155,7 @@ layout_defaults = init_layout_theme()
 layouts = [
     # Try more layouts by unleashing below layouts.
     layout.MonadTall(ratio=0.65, **layout_defaults),
+    layout.Tile(**layout_defaults),
     layout.TreeTab(
         sections=['Code', 'Other'],
         active_bg=main_palette.get('dark1'),
@@ -159,7 +170,6 @@ layouts = [
     # layout.Matrix(),
     # layout.MonadWide(),
     # layout.RatioTile(),
-    # layout.Tile(),
     # layout.VerticalTile(),
     # layout.Zoomy(),
 ]
@@ -236,6 +246,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(wm_class='ssh-askpass'),  # ssh-askpass
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
+    Match(wm_class='pavucontrol'),
 ], border_focus=main_palette.get('blue1'), border_normal=main_palette.get('dark2'))
 auto_fullscreen = True
 focus_on_window_activation = "smart"
