@@ -37,7 +37,9 @@ keys = [
     Key([mod, "shift"], "Return",
         lazy.spawn("rofi -show run"),
         desc="Spawn Rofi menu"),
-    Key([mod], 'F12', lazy.group['scratchpad'].dropdown_toggle('term')),
+    Key([mod], 'F12',
+        lazy.group['scratchpad'].dropdown_toggle('term'),
+        desc="Toggle my scratchpad"),
 
     # Treetab controls
     Key([mod, "control"], "k",
@@ -111,9 +113,10 @@ group_names = [
 groups = [Group(name, **kwargs) for name, kwargs in group_names] + [
 	ScratchPad("scratchpad", [
 		DropDown("term", terminal, 
-			opacity=0.9,
-			width=0.98,
-			x=0.01,
+			opacity=0.8,
+			width=0.9,
+			height=0.5,
+			x=0.05,
 			y=0
 		),
 	]),
@@ -143,7 +146,7 @@ def init_layout_theme():
     colors = main_palette.copy()
     return dict(
         border_width=2,
-        margin=8,
+        margin=4,
         border_focus=colors.get('red2'),
         border_normal=colors.get('dark2')
     )
@@ -188,6 +191,7 @@ screens = [
     Screen(
         top=bar.Bar(
             [
+                widget.Spacer(length=8),
                 widget.GroupBox(
                     font="Fira Code Bold",
                     fontsize=12,
@@ -217,7 +221,7 @@ screens = [
             ],
             24,
             opacity=0.86,
-            margin=[0, 0, 0, 0]
+            margin=[4, 4, 0, 4]
         ),
     ),
 ]
