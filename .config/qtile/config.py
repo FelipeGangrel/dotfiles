@@ -94,7 +94,7 @@ keys = [
     Key([mod, "control"], "Return",
         lazy.layout.toggle_split(),
         desc='Toggle between split and unsplit sides of stack'),
-       
+
 ]
 
 group_names = [
@@ -111,15 +111,15 @@ group_names = [
 
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names] + [
-	ScratchPad("scratchpad", [
-		DropDown("term", terminal, 
-			opacity=0.8,
-			width=0.9,
-			height=0.5,
-			x=0.05,
-			y=0
-		),
-	]),
+    ScratchPad("scratchpad", [
+        DropDown("term", terminal,
+                 opacity=0.8,
+                 width=0.9,
+                 height=0.5,
+                 x=0.05,
+                 y=0
+                 ),
+    ]),
 ]
 
 for i, (name, kwargs) in enumerate(group_names, 1):
@@ -147,7 +147,7 @@ def init_layout_theme():
     return dict(
         border_width=2,
         margin=4,
-        border_focus=colors.get('red2'),
+        border_focus=colors.get('blue1'),
         border_normal=colors.get('dark2')
     )
 
@@ -158,13 +158,13 @@ layout_defaults = init_layout_theme()
 layouts = [
     # Try more layouts by unleashing below layouts.
     layout.MonadTall(ratio=0.65, **layout_defaults),
-    layout.Tile(**layout_defaults),
-    layout.TreeTab(
-        sections=['Code', 'Other'],
-        active_bg=main_palette.get('dark1'),
-        bg_color=main_palette.get('bar_background'),
-        ** layout_defaults
-    ),
+    # layout.Tile(**layout_defaults),
+    # layout.TreeTab(
+    #     sections=['Code', 'Other'],
+    #     active_bg=main_palette.get('dark1'),
+    #     bg_color=main_palette.get('bar_background'),
+    #     ** layout_defaults
+    # ),
     layout.Max(**layout_defaults),
     layout.Floating(),
     # layout.Bsp(**theme_defaults),
@@ -219,9 +219,9 @@ screens = [
                 widget.Systray(),
                 widget.QuickExit(),
             ],
-            24,
-            opacity=0.86,
-            margin=[4, 4, 0, 4]
+            20,
+            opacity=0.96,
+            margin=[0, 0, 0, 0]
         ),
     ),
 ]
