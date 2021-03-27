@@ -11,7 +11,6 @@ from libqtile.utils import guess_terminal
 mod = "mod4"
 terminal = "alacritty"
 
-
 keys = [
     # Essentials
     Key([mod, "control"], "r",
@@ -50,16 +49,16 @@ keys = [
         desc='Move down a section in treetab'),
 
     # Window controls
-    Key([mod], "k",
+    Key([mod], "j",
         lazy.layout.down(),
         desc='Move focus down in current stack pane'),
-    Key([mod], "j",
+    Key([mod], "k",
         lazy.layout.up(),
         desc='Move focus up in current stack pane'),
-    Key([mod, "shift"], "k",
+    Key([mod, "shift"], "j",
         lazy.layout.shuffle_down(),
         desc='Move windows down in current stack'),
-    Key([mod, "shift"], "j",
+    Key([mod, "shift"], "k",
         lazy.layout.shuffle_up(),
         desc='Move windows up in current stack'),
     Key([mod], "h",
@@ -112,13 +111,14 @@ group_names = [
 
 groups = [Group(name, **kwargs) for name, kwargs in group_names] + [
     ScratchPad("scratchpad", [
-        DropDown("term", terminal,
-                 opacity=0.8,
-                 width=0.9,
-                 height=0.5,
-                 x=0.05,
-                 y=0
-                 ),
+        DropDown(
+            "term", terminal,
+            opacity=0.96,
+            width=0.8,
+            height=0.4,
+            x=0.1,
+            y=0.55
+        ),
     ]),
 ]
 
@@ -129,30 +129,23 @@ for i, (name, kwargs) in enumerate(group_names, 1):
     keys.append(Key([mod, "shift"], str(i), lazy.window.togroup(name)))
 
 
-main_palette = dict(
-    bar_background="#0B0C0E",
-    dark1="#383c4a",
-    dark2="#4b5162",
-    light1="#E6E9F3",
-    light2="#F7F8FB",
-    red1="#bf616a",
-    red2="#bf616a",
-    blue1="#3A6E97",
-    blue2="#417BA8",
-)
+# palette
+
+bg_color = "#2c2440"
+fg_color = "#ffffff"
+ac_color = "#12F2DC"
+
+color1 = "#FD5D78"
+color2 = "#8B4E80"
+color3 = "#3599A9"
 
 
-def init_layout_theme():
-    colors = main_palette.copy()
-    return dict(
-        border_width=2,
-        margin=4,
-        border_focus=colors.get('blue1'),
-        border_normal=colors.get('dark2')
-    )
-
-
-layout_defaults = init_layout_theme()
+layout_defaults = {
+    "border_width": 2,
+    "margin": 4,
+    "border_focus": ac_color,
+    "border_normal": bg_color
+}
 
 
 layouts = [
@@ -160,68 +153,170 @@ layouts = [
     layout.MonadTall(ratio=0.65, **layout_defaults),
     # layout.Tile(**layout_defaults),
     # layout.TreeTab(
-    #     sections=['Code', 'Other'],
-    #     active_bg=main_palette.get('dark1'),
-    #     bg_color=main_palette.get('bar_background'),
-    #     ** layout_defaults
+    #     **layout_defaults
     # ),
     layout.Max(**layout_defaults),
     layout.Floating(),
-    # layout.Bsp(**theme_defaults),
-    # layout.Columns(border_focus_stack='#d75f5f'),
+    # layout.Bsp(**layout_defaults),
+    layout.Columns(border_focus_stack=ac_color, **layout_defaults),
     # layout.Stack(num_stacks=2),
     # layout.Matrix(),
     # layout.MonadWide(),
     # layout.RatioTile(),
     # layout.VerticalTile(),
-    # layout.Zoomy(),
+    # layout.Zoomy(**layout_defaults),
 ]
 
 widget_defaults = dict(
-    font='Fira Code Regular',
+    font='FiraCode Nerd Font',
     fontsize=12,
-    padding=8,
-    background=main_palette.get('bar_background'),
-    foreground=main_palette.get('light1')
+    padding=0,
+    background=bg_color,
+    foreground=fg_color,
 )
 
 extension_defaults = widget_defaults.copy()
+
+# Glyphs to cpy and paste
+#    
 
 screens = [
     Screen(
         top=bar.Bar(
             [
-                widget.Spacer(length=8),
+                widget.Sep(
+                    linewidth=0,
+                    padding=6,
+                    background=color2
+                ),
                 widget.GroupBox(
-                    font="Fira Code Bold",
-                    fontsize=12,
-                    borderwidth=0,
-                    padding=8,
-                    active=main_palette.get('light1'),
-                    inactive=main_palette.get('dark2'),
-                    rounded=False,
+                    font="FiraCode Nerd Font Bold",
+                    fontsize=11,
+                    margin_y=4,
+                    borderwidth=2,
+                    padding=4,
+                    background=color2,
+                    active=fg_color,
+                    inactive=bg_color,
+                    highlight_color=[color2, color2],
                     highlight_method="line",
-                    highlight_color=[main_palette.get(
-                        'dark1'), main_palette.get('dark1')],
+                    block_highlight_text_color=fg_color,
+                    this_screen_border=ac_color,
+                    this_current_screen_border=ac_color,
+                    rounded=False,
+                    markup=False,
+                ),
+                widget.TextBox(
+                    text="",
+                    fontsize=20,
+                    padding=0,
+                    foreground=color2,
+                    background=bg_color
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=8
                 ),
                 widget.Prompt(),
                 widget.WindowName(max_chars=140),
+                widget.TextBox(
+                    text="",
+                    fontsize=20,
+                    padding=0,
+                    foreground=color1,
+                    background=bg_color
+                ),
                 widget.CurrentLayoutIcon(
                     custom_icon_paths=[os.path.expanduser(
                         "~/.config/qtile/icons")],
                     padding=0,
                     scale=0.5,
-                    background=main_palette.get('dark1'),
+                    background=color1,
                 ),
-                widget.CurrentLayout(background=main_palette.get('dark2')),
-                widget.Clock(format='%a, %d/%m %H:%M'),
-                widget.Volume(),
-                widget.Systray(),
-                widget.QuickExit(),
+                widget.CurrentLayout(
+                    background=color1,
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=8,
+                    background=color1
+                ),
+                widget.TextBox(
+                    text="",
+                    fontsize=20,
+                    padding=0,
+                    foreground=color3,
+                    background=color1
+                ),
+                widget.CheckUpdates(
+                    no_update_string="No updates",
+                    background=color3
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=8,
+                    background=color3
+                ),
+                widget.TextBox(
+                    text="",
+                    fontsize=20,
+                    padding=0,
+                    foreground=color1,
+                    background=color3
+                ),
+                widget.CPU(
+                    background=color1,
+                    format='CPU {freq_current}GHz {load_percent}%'
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=8,
+                    background=color1
+                ),
+                widget.ThermalSensor(
+                    background=color1,
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=8,
+                    background=color1
+                ),
+                widget.TextBox(
+                    text="",
+                    fontsize=20,
+                    padding=0,
+                    foreground=color3,
+                    background=color1
+                ),
+                widget.Clock(
+                    format='%a, %d/%m %H:%M',
+                    background=color3,
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=8,
+                    background=color3
+                ),
+                widget.TextBox(
+                    text="",
+                    fontsize=20,
+                    padding=0,
+                    foreground=bg_color,
+                    background=color3
+                ),
+                widget.Systray(
+                    background=bg_color,
+                    padding=8
+                ),
+                widget.Sep(
+                    linewidth=0,
+                    padding=20,
+                    background=bg_color
+                )
             ],
             20,
-            opacity=0.96,
-            margin=[0, 0, 0, 0]
+            opacity=0.92,
+            margin=[4, 4, 0, 4]
         ),
     ),
 ]
@@ -238,7 +333,7 @@ mouse = [
 dgroups_key_binder = None
 dgroups_app_rules = []  # type: List
 main = None  # WARNING: this is deprecated and will be removed soon
-follow_mouse_focus = True
+follow_mouse_focus = False
 bring_front_click = False
 cursor_warp = False
 floating_layout = layout.Floating(float_rules=[
@@ -251,7 +346,7 @@ floating_layout = layout.Floating(float_rules=[
     Match(title='branchdialog'),  # gitk
     Match(title='pinentry'),  # GPG key password entry
     Match(wm_class='pavucontrol'),
-], border_focus=main_palette.get('blue1'), border_normal=main_palette.get('dark2'))
+], border_focus="#12F2DC", border_normal="#5C5F88")
 auto_fullscreen = True
 focus_on_window_activation = "smart"
 
