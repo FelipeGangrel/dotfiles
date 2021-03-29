@@ -1,5 +1,11 @@
 /*Dracula theme based on the Purple official rofi theme*/
 
+
+configuration {
+    modi: "window,run,ssh,drun,emoji";
+    width: 40;
+}
+
 * {
     font: "FiraCode 12";
     foreground: #f5cab8;
@@ -15,7 +21,7 @@
 
 #window {
     background-color: @background;
-    border:           3;
+    border:           2;
     border-radius: 10;
     border-color: @bordercolor;
     padding:          20;

@@ -34,12 +34,18 @@ keys = [
         lazy.spawn(terminal),
         desc="Launch terminal"),
     Key([mod, "shift"], "Return",
-        lazy.spawn("rofi -show run"),
+        lazy.spawn("rofi -show drun -show-icons"),
         desc="Spawn Rofi menu"),
-    Key([mod], 'F12',
+    Key([mod, "shift"], "e",
+        lazy.spawn("rofi -show emoji -modi-emoji"),
+        desc="Spawn Rofi menu"),
+    Key([mod], "F12",
         lazy.group['scratchpad'].dropdown_toggle('term'),
         desc="Toggle my scratchpad"),
-
+    Key([mod], "Print",
+	lazy.spawn("flameshot gui"),
+        desc="Launch Flameshot for taking screenshots"),
+	
     # Treetab controls
     Key([mod, "control"], "k",
         lazy.layout.section_up(),
@@ -105,7 +111,7 @@ group_names = [
     ("6", {'layout': 'monadtall'}),
     ("7", {'layout': 'monadtall'}),
     ("8", {'layout': 'monadtall'}),
-    ("9", {'layout': 'floating'})
+    ("9", {'layout': 'columns'})
 ]
 
 
@@ -114,10 +120,10 @@ groups = [Group(name, **kwargs) for name, kwargs in group_names] + [
         DropDown(
             "term", terminal,
             opacity=0.96,
-            width=0.8,
+            width=0.4,
             height=0.4,
-            x=0.1,
-            y=0.55
+            x=0.3,
+            y=0.3,
         ),
     ]),
 ]
